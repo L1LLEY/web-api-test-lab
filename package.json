@@ -1,0 +1,23 @@
+{
+  "name": "web-api-test-lab",
+  "version": "1.0.0",
+  "description": "Web API Test Laboratuvarı - Postman Klonu",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "api",
+    "test",
+    "postman",
+    "nodejs",
+    "express"
+  ],
+  "author": "Wesley & Selin",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

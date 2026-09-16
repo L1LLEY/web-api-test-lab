@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web API Test Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-logo">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      </div>
+      <div class="brand-title">Web API Test Lab</div>
+    </div>
+
+    <div class="header-actions">
+      <div class="pair-badge" id="pairBadge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <span>Slein & Wesley</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="easterEggBanner" class="easter-egg-banner hidden">
+    💖 Sonsuz Sevgi Paskalya Yumurtası Bulundu! 💖
+  </div>
+
+  <div class="app-body">
+    <aside class="app-sidebar">
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab-btn active" data-target="collections">Collections</button>
+        <button class="sidebar-tab-btn" data-target="history">History</button>
+      </div>
+
+      <div class="sidebar-content">
+        <div id="sidebarCollections"></div>
+        <div id="sidebarHistory" style="display: none;"></div>
+      </div>
+    </aside>
+
+    <main class="app-workspace">
+      <div class="workspace-tabs-bar">
+        <div id="workspaceTabsContainer"></div>
+        <button class="tab-btn-add" id="btnNewTab" title="Yeni Sekme">+</button>
+      </div>
+
+      <section class="url-section">
+        <div class="url-bar">
+          <select class="method-select" id="methodSelect" data-method="GET">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+            <option value="PATCH">PATCH</option>
+          </select>
+
+          <div class="url-input-wrap">
+            <input 
+              type="text" 
+              class="url-input" 
+              id="urlInput" 
+              placeholder="https://jsonplaceholder.typicode.com/posts/1" 
+              value="https://jsonplaceholder.typicode.com/posts/1"
+            />
+          </div>
+
+          <button class="btn-secondary" id="btnCodeGen" title="Kod çıktısı">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span>Code</span>
+          </button>
+
+          <button class="btn-primary" id="btnSend">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>Gönder</span>
+          </button>
+        </div>
+
+        <div class="url-footer-bar">
+          <div>Kısayol: <span class="shortcut-badge">Ctrl + Enter</span></div>
+        </div>
+      </section>
+
+      <div class="workspace-panes">
+        <div class="req-pane-wrap">
+          <div class="pane-header">
+            <div class="pane-nav" id="reqPaneTabs">
+              <button class="pane-tab-btn active" data-target="paneParams">Params</button>
+              <button class="pane-tab-btn" data-target="paneHeaders">Headers</button>
+              <button class="pane-tab-btn" data-target="paneAuth">Auth</button>
+              <button class="pane-tab-btn" data-target="paneBody">Body</button>
+            </div>
+          </div>
+
+          <div id="reqPaneBodies">
+            <div class="pane-body active" id="paneParams">
+              <table class="data-table" id="paramsTable">
+                <thead>
+                  <tr>
+                    <th style="width: 45%;">Param</th>
+                    <th style="width: 45%;">Value</th>
+                    <th style="width: 10%;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="text" class="table-input col-key" placeholder="key" value=""></td>
+                    <td><input type="text" class="table-input col-val" placeholder="value" value=""></td>
+                    <td style="text-align: center;"><button class="btn-icon" onclick="this.closest('tr').remove()">&times;</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="btn-add-item" onclick="window.addTableRow('paramsTable')">+ Parametre Ekle</button>
+            </div>
+
+            <div class="pane-body" id="paneHeaders">
+              <table class="data-table" id="headersTable">
+                <thead>
+                  <tr>
+                    <th style="width: 45%;">Header</th>
+                    <th style="width: 45%;">Value</th>
+                    <th style="width: 10%;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="text" class="table-input col-key" placeholder="Header" value="Content-Type"></td>
+                    <td><input type="text" class="table-input col-val" placeholder="Value" value="application/json"></td>
+                    <td style="text-align: center;"><button class="btn-icon" onclick="this.closest('tr').remove()">&times;</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="btn-add-item" onclick="window.addTableRow('headersTable')">+ Header Ekle</button>
+            </div>
+
+            <div class="pane-body" id="paneAuth">
+              <div class="auth-bar">
+                <label>Kimlik Doğrulama:</label>
+                <select class="auth-select" id="authTypeSelect">
+                  <option value="none">No Auth</option>
+                  <option value="bearer">Bearer Token</option>
+                  <option value="basic">Basic Auth</option>
+                </select>
+              </div>
+
+              <div id="authBearerGroup" style="display: none; margin-top: 10px;">
+                <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Token:</label>
+                <input type="text" class="table-input" id="bearerTokenInput" placeholder="Bearer token..." style="max-width: 400px;">
+              </div>
+
+              <div id="authBasicGroup" style="display: none; margin-top: 10px; display: flex; gap: 10px;">
+                <div>
+                  <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Kullanıcı Adı:</label>
+                  <input type="text" class="table-input" id="basicUserInput" placeholder="Username">
+                </div>
+                <div>
+                  <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Şifre:</label>
+                  <input type="password" class="table-input" id="basicPassInput" placeholder="Password">
+                </div>
+              </div>
+            </div>
+
+            <div class="pane-body" id="paneBody">
+              <div class="code-editor-wrapper">
+                <div class="editor-actions-bar">
+                  <span style="font-size: 11px; color: var(--text-muted);">JSON Body</span>
+                  <button class="btn-secondary" id="btnFormatJson" style="padding: 3px 8px; font-size: 11px;">Format JSON</button>
+                </div>
+                <textarea class="editor-textarea" id="jsonBodyInput" placeholder='{\n  "title": "foo",\n  "body": "bar",\n  "userId": 1\n}'></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="response-container">
+          <div class="pane-header">
+            <div class="response-status-bar">
+              <span class="status-badge" id="statusBadge">
+                <span class="status-dot"></span> READY
+              </span>
+              <span class="response-meta-text">Süre: <strong id="timeStat">0 ms</strong></span>
+              <span class="response-meta-text">Boyut: <strong id="sizeStat">0 B</strong></span>
+            </div>
+
+            <div style="display: flex; gap: 6px;">
+              <button class="btn-secondary" id="btnCopyResponse" style="padding: 3px 8px; font-size: 11px;">Copy</button>
+              <button class="btn-secondary" id="btnDownloadResponse" style="padding: 3px 8px; font-size: 11px;">Download</button>
+            </div>
+          </div>
+
+          <div class="response-filter-bar">
+            <div class="pane-nav" id="resPaneTabs">
+              <button class="pane-tab-btn active" data-target="paneResBody">Response</button>
+              <button class="pane-tab-btn" data-target="paneResHeaders">Headers</button>
+            </div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 6px;">
+              <input type="text" class="search-input" id="responseSearch" placeholder="Filtrele...">
+            </div>
+          </div>
+
+          <div id="resPaneBodies">
+            <div class="pane-body active" id="paneResBody" style="padding: 0;">
+              <div class="response-viewer-wrapper">
+                <div class="line-numbers-col" id="lineNumbers">1</div>
+                <div class="code-content-col" id="codeContent">
+                  <span class="token-null">Yanıt bekleniyor...</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pane-body" id="paneResHeaders">
+              <div id="responseHeadersTable">
+                <div style="color: var(--text-muted); font-size: 11.5px;">Henüz yanıt başlığı yok.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="app-statusbar">
+    <div class="statusbar-left">
+      <div class="statusbar-item">
+        <span class="env-dot"></span>
+        <span id="statusEngine">READY</span>
+      </div>
+      <div class="statusbar-item">UTF-8</div>
+      <div class="statusbar-item">JSON</div>
+    </div>
+    <div class="statusbar-right">
+      <div class="statusbar-item">Slein & Wesley</div>
+    </div>
+  </footer>
+
+  <div class="app-modal-overlay" id="codeSnippetModal">
+    <div class="app-modal-card">
+      <div class="modal-header">
+        <span class="modal-title">Kod Çıktısı</span>
+        <select class="auth-select" id="snippetTypeSelect">
+          <option value="curl">cURL</option>
+          <option value="fetch">Fetch (JS)</option>
+          <option value="python">Python</option>
+        </select>
+      </div>
+      <div class="modal-body">
+        <pre class="snippet-preview" id="snippetPreview"></pre>
+      </div>
+      <div class="modal-header" style="justify-content: flex-end; gap: 8px;">
+        <button class="btn-secondary" id="btnCloseSnippetModal">Kapat</button>
+        <button class="btn-primary" id="btnCopySnippet">Kopyala</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-modal-overlay" id="easterModal">
+    <div class="app-modal-card" style="border-color: rgba(236, 72, 153, 0.4); max-width: 400px; text-align: center;">
+      <div class="modal-header" style="background: rgba(236, 72, 153, 0.1);">
+        <span class="modal-title" style="color: #f472b6;">💖 Paskalya Yumurtası</span>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #fff;">Tebrikler!</h3>
+        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin-bottom: 16px;">
+          Gizli paskalya yumurtasını buldun!<br>
+          <strong>Slein & Wesley</strong> ortaklığı başarıyla çalışıyor. ✨
+        </p>
+        <button class="btn-primary" style="background: #ec4899; margin: 0 auto;" onclick="window.EasterEgg.closeModal()">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-shelf" id="toastShelf"></div>
+
+  <script src="assets/js/syntax.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/easter-egg.js"></script>
+  <script src="assets/js/slein-logic.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
